@@ -3,7 +3,9 @@
 
 #include <QWidget>
 #include <vector>
+#include <map>
 #include "drawdatatype.h"
+#include "Single-Lane-Bridge/singlelanebridge.h"
 
 class Canvas : public QWidget
 {
@@ -16,16 +18,23 @@ signals:
 
 public slots:
     void updateCanvas();
+    void setObjects(int id, int pos);
 
 private:
+    int width; // Canvas's width
+    int height; // Canvas's height
+    int carWidth;
+    int carHeight;
+    int upLanePos, downLanePos, midLanePos;
+    const int laneWidth = 60; // Bridge's lane width
+    const int lanePadding = 5;
+    std::vector<Line> _solidLines;
+    std::vector<Line> _dottedLines;
+    std::map<int, Object> objects;
+
     void resizeEvent(QResizeEvent *event);
     QWidget *createCanvasWidget();
     void paintEvent(QPaintEvent *event);
-    std::vector<Line> _solidLines;
-    std::vector<Line> _dottedLines;
-    std::vector<Object> objects;
-    int width;
-    int height;
 };
 
 #endif // CANVAS_H

@@ -11,6 +11,11 @@ Canvas::Canvas(QWidget *parent) : QWidget(parent)
 
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
+
+    // Calculate car size
+    carHeight = laneWidth - (lanePadding * 2);
+    QPixmap tmp(":/cars/img/redcar.png");
+    carWidth = carHeight * (tmp.width() / tmp.height());
 }
 
 void
@@ -27,6 +32,9 @@ Canvas::updateCanvas()
     width = (this -> size()).width();
     height = (this -> size()).height();
 
+    upLanePos = (height / 2) - laneWidth + lanePadding;
+    downLanePos = (height / 2) + laneWidth - lanePadding;
+    midLanePos = (height / 2) - (laneWidth / 2) + lanePadding;
     drawSingleLaneBridge();
 }
 
@@ -56,10 +64,14 @@ Canvas::paintEvent(QPaintEvent *event)
        painter.drawLine(tmp.xfrom, tmp.yfrom, tmp.xto, tmp.yto);
    }
 
-   for(unsigned int iter(0); iter<objects.size(); ++iter){
-       Object tmp(objects.at(iter));
+   std::map<int, Object>::iterator objectsIter;
+   for(objectsIter=objects.begin(); objectsIter != objects.end(); ++objectsIter){
+       Object tmp(objectsIter -> second);
        QPixmap img(tmp.imgPath);
-       painter.drawPixmap(tmp.xpos, tmp.ypos, img.scaledToHeight(tmp.height, Qt::SmoothTransformation));
+       QPixmap scaledImg(img.scaledToHeight(tmp.height, Qt::SmoothTransformation));
+       QTransform trans;
+       QPixmap outImg(scaledImg.transformed(trans.rotate(tmp.deg)));
+       painter.drawPixmap(tmp.xpos, tmp.ypos, outImg);
    }
 }
 
@@ -68,23 +80,51 @@ Canvas::drawSingleLaneBridge()
 {
     _solidLines.clear();
     _dottedLines.clear();
-    objects.clear();
-    const int laneWidth = 100;
 
     // Line
-    _dottedLines.push_back(Line(0, height/2, width/4, height/2));
-    _solidLines.push_back(Line(0, (height/2)+laneWidth, width/4, (height/2)+laneWidth));
-    _solidLines.push_back(Line(0, (height/2)-laneWidth, width/4, (height/2)-laneWidth));
-    _solidLines.push_back(Line(width/4, (height/2)+laneWidth, width/3, (height/2)+(laneWidth/2)));
-    _solidLines.push_back(Line(width/4, (height/2)-laneWidth, width/3, (height/2)-(laneWidth/2)));
-    _solidLines.push_back(Line(width/3, (height/2)+(laneWidth/2), width*2/3, (height/2)+(laneWidth/2)));
-    _solidLines.push_back(Line(width/3, (height/2)-(laneWidth/2), width*2/3, (height/2)-(laneWidth/2)));
-    _solidLines.push_back(Line(width*2/3, (height/2)+(laneWidth/2), width*3/4, (height/2)+(laneWidth)));
-    _solidLines.push_back(Line(width*2/3, (height/2)-(laneWidth/2), width*3/4, (height/2)-(laneWidth)));
-    _dottedLines.push_back(Line(width*3/4, height/2, width, height/2));
-    _solidLines.push_back(Line(width*3/4, (height/2)+laneWidth, width, (height/2)+laneWidth));
-    _solidLines.push_back(Line(width*3/4, (height/2)-laneWidth, width, (height/2)-laneWidth));
+    double turnPos[6];
+    for(int iter(0); iter < 6; ++iter){
+        turnPos[iter] = (double)bridgeTurnPos[iter] / bridgeLen * width;
+    }
+    _dottedLines.push_back(Line(turnPos[0], height/2, turnPos[1], height/2));
+    _solidLines.push_back(Line(turnPos[0], (height/2)+laneWidth, turnPos[1], (height/2)+laneWidth));
+    _solidLines.push_back(Line(turnPos[0], (height/2)-laneWidth, turnPos[1], (height/2)-laneWidth));
+    _solidLines.push_back(Line(turnPos[1], (height/2)+laneWidth, turnPos[2], (height/2)+(laneWidth/2)));
+    _solidLines.push_back(Line(turnPos[1], (height/2)-laneWidth, turnPos[2], (height/2)-(laneWidth/2)));
+    _solidLines.push_back(Line(turnPos[2], (height/2)+(laneWidth/2), turnPos[3], (height/2)+(laneWidth/2)));
+    _solidLines.push_back(Line(turnPos[2], (height/2)-(laneWidth/2), turnPos[3], (height/2)-(laneWidth/2)));
+    _solidLines.push_back(Line(turnPos[3], (height/2)+(laneWidth/2), turnPos[4], (height/2)+(laneWidth)));
+    _solidLines.push_back(Line(turnPos[3], (height/2)-(laneWidth/2), turnPos[4], (height/2)-(laneWidth)));
+    _dottedLines.push_back(Line(turnPos[4], height/2, turnPos[5], height/2));
+    _solidLines.push_back(Line(turnPos[4], (height/2)+laneWidth, turnPos[5], (height/2)+laneWidth));
+    _solidLines.push_back(Line(turnPos[4], (height/2)-laneWidth, turnPos[5], (height/2)-laneWidth));
+}
 
-    // Objects
-    objects.push_back(Object(0, (height/2)-laneWidth+15, 70, ":/cars/img/redcar.png"));
+void
+Canvas::setObjects(int id, int pos)
+{
+    // Calculate x, y position value
+    int x, y, rPos(pos + carWidth);
+    x = pos * width / bridgeLen;
+    if(bridgeTurnPos[2] < rPos && pos < bridgeTurnPos[3]) {
+        y = midLanePos;
+    } else if(bridgeTurnPos[1] <= rPos && rPos <= bridgeTurnPos[2]) {
+        double ratio = (double)(rPos - bridgeTurnPos[1]) / (bridgeTurnPos[2] - bridgeTurnPos[1]);
+        double offset = (laneWidth / 2) * ratio;
+        y = upLanePos + offset;
+    } else if(bridgeTurnPos[3] <= pos && pos <= bridgeTurnPos[4]) {
+        double ratio = (double)(pos - bridgeTurnPos[3]) / (bridgeTurnPos[4] - bridgeTurnPos[3]);
+        double offset = (laneWidth / 2) * ratio;
+        y = midLanePos - offset;
+    } else {
+        y = upLanePos;
+    }
+
+    if(objects.find(id) != objects.end()){
+        objects.at(id).xpos = x;
+        objects.at(id).ypos = y;
+    } else {
+        objects.insert(std::pair<int, Object>(id, Object(x, y, carHeight, 0, ":/cars/img/redcar.png")));
+    }
+    this -> update();
 }

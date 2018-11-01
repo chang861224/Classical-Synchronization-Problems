@@ -16,14 +16,15 @@ struct Line
 
 struct Object
 {
-    Object(int x, int y, int h, QString path) {
+    Object(int x, int y, int h, int rotate, QString path) {
         xpos = x;
         ypos = y;
         height = h;
+        deg = rotate;
         imgPath = path;
     }
 
-    int xpos, ypos, height;
+    int xpos, ypos, height, deg;
     QString imgPath;
 };
 

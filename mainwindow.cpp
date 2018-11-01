@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "sidemenu.h"
 #include "canvas.h"
+#include "Single-Lane-Bridge/singlelanebridge.h"
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QGuiApplication>
@@ -28,12 +29,17 @@ MainWindow::MainWindow(QWidget *parent)
     SideMenu *sidemenu = new SideMenu();
     Canvas *canvas = new Canvas();
 
+    // Problem
+    SingleLaneBridge *problem = new SingleLaneBridge;
+    problem -> start();
+    connect(problem, SIGNAL(carChanged(int,int)), canvas, SLOT(setObjects(int,int)));
+
     // Layout
     QGridLayout *mainLayout = new QGridLayout();
     mainLayout -> addWidget(canvas, 0, 0);
-    mainLayout -> setColumnStretch(0, 5);
-    mainLayout -> addWidget(sidemenu, 0, 1);
-    mainLayout -> setColumnStretch(1, 1);
+    mainLayout -> setRowStretch(0, 5);
+    mainLayout -> addWidget(sidemenu, 1, 0);
+    mainLayout -> setRowStretch(1, 1);
 
     //Set layout
     win -> setLayout(mainLayout);

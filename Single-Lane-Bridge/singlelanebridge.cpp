@@ -4,9 +4,6 @@
 
 SingleLaneBridge::SingleLaneBridge()
 {
-    bridgeLen = 100;
-    bridgeEntryPos[0] = 25;
-    bridgeEntryPos[1] = 75;
 }
 
 void
@@ -17,12 +14,9 @@ SingleLaneBridge::run()
         tmp[iter] = new Car();
     }
 
-    for(int iter(0); iter<2; ++iter){
-//        Car *a = new Car();
-//        a->start();
-//        connect(a, SIGNAL(posChanged(int, int)), this, SLOT(updatePos(int, int)));
+    for(int iter(0); iter<1; ++iter){
         tmp[iter] -> start();
-        connect(tmp[iter], SIGNAL(posChanged(int,int)), this, SLOT(updatePos(int,int)));
+        connect(tmp[iter], SIGNAL(posChanged(int,int)), this, SIGNAL(carChanged(int,int)));
         connect(tmp[iter], SIGNAL(finished()), tmp[iter], SLOT(deleteLater()));
     }
 //    a.wait();
