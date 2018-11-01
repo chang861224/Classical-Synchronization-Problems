@@ -56,6 +56,11 @@ Canvas::paintEvent(QPaintEvent *event)
        painter.drawLine(tmp.xfrom, tmp.yfrom, tmp.xto, tmp.yto);
    }
 
+   for(unsigned int iter(0); iter<objects.size(); ++iter){
+       Object tmp(objects.at(iter));
+       QPixmap img(tmp.imgPath);
+       painter.drawPixmap(tmp.xpos, tmp.ypos, img.scaledToHeight(tmp.height, Qt::SmoothTransformation));
+   }
 }
 
 void
@@ -63,8 +68,10 @@ Canvas::drawSingleLaneBridge()
 {
     _solidLines.clear();
     _dottedLines.clear();
+    objects.clear();
     const int laneWidth = 100;
 
+    // Line
     _dottedLines.push_back(Line(0, height/2, width/4, height/2));
     _solidLines.push_back(Line(0, (height/2)+laneWidth, width/4, (height/2)+laneWidth));
     _solidLines.push_back(Line(0, (height/2)-laneWidth, width/4, (height/2)-laneWidth));
@@ -78,4 +85,6 @@ Canvas::drawSingleLaneBridge()
     _solidLines.push_back(Line(width*3/4, (height/2)+laneWidth, width, (height/2)+laneWidth));
     _solidLines.push_back(Line(width*3/4, (height/2)-laneWidth, width, (height/2)-laneWidth));
 
+    // Objects
+    objects.push_back(Object(0, (height/2)-laneWidth+15, 70, ":/cars/img/redcar.png"));
 }

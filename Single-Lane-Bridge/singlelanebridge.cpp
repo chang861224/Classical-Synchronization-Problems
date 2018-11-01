@@ -17,7 +17,7 @@ SingleLaneBridge::run()
         tmp[iter] = new Car();
     }
 
-    for(int iter(0); iter<100; ++iter){
+    for(int iter(0); iter<2; ++iter){
 //        Car *a = new Car();
 //        a->start();
 //        connect(a, SIGNAL(posChanged(int, int)), this, SLOT(updatePos(int, int)));

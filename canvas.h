@@ -23,6 +23,7 @@ private:
     void paintEvent(QPaintEvent *event);
     std::vector<Line> _solidLines;
     std::vector<Line> _dottedLines;
+    std::vector<Object> objects;
     int width;
     int height;
 };

@@ -39,6 +39,6 @@ HEADERS += \
     Single-Lane-Bridge/singlelanebridge.h \
     Single-Lane-Bridge/car.h \
 
-DISTFILES += \
-    img/redcar.png \
-    img/yellowcar.png
+RESOURCES += \
+    resourcefile.qrc
+
