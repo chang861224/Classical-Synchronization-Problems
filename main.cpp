@@ -11,7 +11,6 @@ int main(int argc, char *argv[])
 
     SingleLaneBridge b;
     b.start();
-//    b.run();
 
     return a.exec();
 }

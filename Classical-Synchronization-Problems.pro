@@ -28,10 +28,43 @@ SOURCES += \
         mainwindow.cpp \
         sidemenu.cpp \
     Single-Lane-Bridge/singlelanebridge.cpp \
-    Single-Lane-Bridge/car.cpp
+    Single-Lane-Bridge/car.cpp \
+    canvas.cpp \
+    Single-Lane-Bridge/car.cpp \
+    Single-Lane-Bridge/main.cpp \
+    Single-Lane-Bridge/singlelanebridge.cpp \
+    canvas.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    sidemenu.cpp \
+    Single-Lane-Bridge/car.cpp \
+    Single-Lane-Bridge/main.cpp \
+    Single-Lane-Bridge/singlelanebridge.cpp \
+    canvas.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    sidemenu.cpp
 
 HEADERS += \
         mainwindow.h \
     sidemenu.h \
     Single-Lane-Bridge/singlelanebridge.h \
-    Single-Lane-Bridge/car.h
+    Single-Lane-Bridge/car.h \
+    canvas.h \
+    drawdatatype.h \
+    Single-Lane-Bridge/car.h \
+    Single-Lane-Bridge/singlelanebridge.h \
+    canvas.h \
+    drawdatatype.h \
+    mainwindow.h \
+    sidemenu.h \
+    Single-Lane-Bridge/car.h \
+    Single-Lane-Bridge/singlelanebridge.h \
+    canvas.h \
+    drawdatatype.h \
+    mainwindow.h \
+    sidemenu.h
+
+DISTFILES += \
+    img/redcar.png \
+    img/yellowcar.png

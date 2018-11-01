@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "sidemenu.h"
-#include <QVBoxLayout>
+#include "canvas.h"
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QGuiApplication>
 #include <QScreen>
 
@@ -24,10 +26,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Widgets
     SideMenu *sidemenu = new SideMenu();
+    Canvas *canvas = new Canvas();
 
     // Layout
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout -> addWidget(sidemenu);
+    QGridLayout *mainLayout = new QGridLayout();
+    mainLayout -> addWidget(canvas, 0, 0);
+    mainLayout -> setColumnStretch(0, 5);
+    mainLayout -> addWidget(sidemenu, 0, 1);
+    mainLayout -> setColumnStretch(1, 1);
 
     //Set layout
     win -> setLayout(mainLayout);
