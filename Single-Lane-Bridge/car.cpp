@@ -20,24 +20,29 @@ Car::Car(bool direction, int speed) : id(++lastID)
 void
 Car::run()
 {
-    for(int pos(0); pos < bridgeLen; pos++){
-        if(_direction == 0) {
+    if(_direction == 0) {
+        for(int pos(0); pos < bridgeLen; pos++){
             if(pos == bridgeEntryPos[0]) {
                 westTrafficLight -> acquire(1);
             } else if(pos == bridgeEntryPos[1]) {
                 westTrafficLight -> release(1);
             }
-        } else if(_direction == 1) {
+            emit posChanged(id, pos);
+            QThread::currentThread() -> msleep(10);
+        }
+    } else if (_direction == 1) {
+        for(int pos(bridgeLen); pos >= 0; --pos){
             if(pos == bridgeEntryPos[1]) {
                 eastTrafficLight -> acquire(1);
             } else if(pos == bridgeEntryPos[0]) {
                 eastTrafficLight -> release(1);
             }
+            emit posChanged(id, pos);
+            QThread::currentThread() -> msleep(10);
         }
-
-        emit posChanged(id, pos);
-        QThread::currentThread() -> msleep(10);
     }
+
+    emit finished(id);
 }
 
 unsigned int

@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QSemaphore>
 
-const int kMaxCars2Pass = 5;
+const int kMaxCars2Pass = 3;
 static QSemaphore *eastTrafficLight = new QSemaphore(kMaxCars2Pass);
 static QSemaphore *westTrafficLight = new QSemaphore(kMaxCars2Pass);
 const int bridgeLen = 1000;
@@ -25,6 +25,7 @@ public slots:
 
 signals:
     void carChanged(int carID, int pos);
+    void deleteCar(int carID);
 };
 
 #endif // SINGLELANEBRIDGE_H

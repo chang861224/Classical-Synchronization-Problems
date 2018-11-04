@@ -19,6 +19,7 @@ signals:
 public slots:
     void updateCanvas();
     void setObjects(int id, int pos);
+    void deleteObject(int id);
 
 private:
     int width; // Canvas's width

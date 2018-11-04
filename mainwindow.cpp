@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     SingleLaneBridge *problem = new SingleLaneBridge;
     problem -> start();
     connect(problem, SIGNAL(carChanged(int,int)), canvas, SLOT(setObjects(int,int)));
+    connect(problem, SIGNAL(deleteCar(int)), canvas, SLOT(deleteObject(int)));
 
     // Layout
     QGridLayout *mainLayout = new QGridLayout();

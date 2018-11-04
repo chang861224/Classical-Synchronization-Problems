@@ -128,3 +128,9 @@ Canvas::setObjects(int id, int pos)
     }
     this -> update();
 }
+
+void
+Canvas::deleteObject(int id)
+{
+    objects.erase(id);
+}

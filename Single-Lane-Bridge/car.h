@@ -16,6 +16,7 @@ public:
 
 signals:
     void posChanged(int, int);
+    void finished(int);
 
 private:
     unsigned int id;
