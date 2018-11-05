@@ -110,12 +110,14 @@ Canvas::setObjects(int id, int pos)
     }
 
     // Calculate x, y position value
-    int x, y, rPos(pos + carWidth);
-    x = pos * width / bridgeLen;
-    if(bridgeTurnPos[2] < rPos && pos < bridgeTurnPos[3]) {
+    int x, y;
+    if(east2west) x = pos * width / bridgeLen;
+    else x = (pos - carWidth) * width / bridgeLen;
+
+    if(bridgeTurnPos[2] < pos && pos < bridgeTurnPos[3]) {
         y = midLanePos;
-    } else if(bridgeTurnPos[1] <= rPos && rPos <= bridgeTurnPos[2]) {
-        double ratio = (double)(rPos - bridgeTurnPos[1]) / (bridgeTurnPos[2] - bridgeTurnPos[1]);
+    } else if(bridgeTurnPos[1] <= pos && pos <= bridgeTurnPos[2]) {
+        double ratio = (double)(pos - bridgeTurnPos[1]) / (bridgeTurnPos[2] - bridgeTurnPos[1]);
         double offset = (laneWidth / 2) * ratio;
         if(!east2west) y = upLanePos + offset;
         else y = downLanePos - offset;

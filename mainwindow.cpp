@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Initialize window
     QRect desktop =  QGuiApplication::primaryScreen() -> geometry();
-    int win_height = 540;
-    int win_width = 960;
+    int win_height = desktop.height() / 2;
+    int win_width = desktop.width() / 2;
     setGeometry(desktop.width()/4, desktop.height()/4, win_width, win_height);
     setWindowTitle(tr("Single Lane Bridge Problem"));
     setMinimumSize(win_width/2, win_height/2);
