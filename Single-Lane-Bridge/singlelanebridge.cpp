@@ -11,11 +11,12 @@ SingleLaneBridge::SingleLaneBridge()
 void
 SingleLaneBridge::run()
 {
-    qDebug() << &eastTrafficLight;
     Car *upLaneCars[50], *downLaneCars[50];
     for(int iter(0); iter < 50; ++iter){
         upLaneCars[iter] = new Car(false);
+        upLaneCars[iter] -> setTrafficLight(westTrafficLight, eastTrafficLight);
         downLaneCars[iter] = new Car(true);
+        downLaneCars[iter] -> setTrafficLight(westTrafficLight, eastTrafficLight);
     }
 
     for(int iter(0); iter < 10; ++iter){

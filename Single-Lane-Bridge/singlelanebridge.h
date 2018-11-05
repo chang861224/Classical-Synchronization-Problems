@@ -6,8 +6,6 @@
 #include <QSemaphore>
 
 const int kMaxCars2Pass = 3;
-static QSemaphore *eastTrafficLight = new QSemaphore(kMaxCars2Pass);
-static QSemaphore *westTrafficLight = new QSemaphore(0);
 const int bridgeTurnPos[6] = {0, 300, 400, 600, 700, 1000};
 const int bridgeLen = bridgeTurnPos[5];
 const int bridgeEntryPos = bridgeTurnPos[1];
@@ -30,6 +28,8 @@ signals:
 private:
     bool east2west; // Control which direction's car can go
     void switchLight(); // Switch both traffic light
+    QSemaphore *eastTrafficLight = new QSemaphore(kMaxCars2Pass);
+    QSemaphore *westTrafficLight = new QSemaphore(0);
 };
 
 #endif // SINGLELANEBRIDGE_H

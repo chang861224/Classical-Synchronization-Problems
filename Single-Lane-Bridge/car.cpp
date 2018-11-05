@@ -20,18 +20,17 @@ Car::Car(bool direction, int speed) : id(++lastID)
 void
 Car::run()
 {
-    qDebug() << &eastTrafficLight;
     for(int pos(1); pos < bridgeLen; ++pos){
         if(pos == bridgeEntryPos) {
             if(_direction == false) {
-                westTrafficLight -> acquire(1);
+                lTrafficLight -> acquire(1);
             }
             else if(_direction == true) {
-                eastTrafficLight -> acquire(1);
+                rTrafficLight -> acquire(1);
             }
         } else if(pos == (bridgeLen - bridgeEntryPos)) {
-            if(_direction == false) westTrafficLight -> release(1);
-            else if(_direction == true) eastTrafficLight -> release(1);
+            if(_direction == false) lTrafficLight -> release(1);
+            else if(_direction == true) rTrafficLight -> release(1);
         }
 
         if(_direction == false) emit posChanged(id, pos);
@@ -46,4 +45,11 @@ unsigned int
 Car::getID() const
 {
     return id;
+}
+
+void
+Car::setTrafficLight(QSemaphore *left, QSemaphore *right)
+{
+    lTrafficLight = left;
+    rTrafficLight = right;
 }
