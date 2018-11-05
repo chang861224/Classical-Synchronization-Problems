@@ -4,15 +4,18 @@
 
 SingleLaneBridge::SingleLaneBridge()
 {
+    if(eastTrafficLight -> available() > 0) east2west = true;
+    else if(westTrafficLight -> available() > 0) east2west = false;
 }
 
 void
 SingleLaneBridge::run()
 {
+    qDebug() << &eastTrafficLight;
     Car *upLaneCars[50], *downLaneCars[50];
     for(int iter(0); iter < 50; ++iter){
-        upLaneCars[iter] = new Car();
-        downLaneCars[iter] = new Car(1);
+        upLaneCars[iter] = new Car(false);
+        downLaneCars[iter] = new Car(true);
     }
 
     for(int iter(0); iter < 10; ++iter){
@@ -26,13 +29,24 @@ SingleLaneBridge::run()
         connect(downLaneCars[iter], SIGNAL(finished()), downLaneCars[iter], SLOT(deleteLater()));
         connect(downLaneCars[iter], SIGNAL(finished(int)), this, SIGNAL(deleteCar(int)));
 
-        QThread::currentThread() -> msleep(1000);
+        QThread::currentThread() -> msleep(1200);
     }
-//    a.wait();
 }
 
 void
 SingleLaneBridge::updatePos(int carID, int pos)
 {
     qDebug() << "Car:" << carID << ", Pos:" << pos;
+}
+
+void
+SingleLaneBridge::switchLight()
+{
+    if(east2west){
+        for(int iter(0); iter < kMaxCars2Pass; ++iter) eastTrafficLight -> acquire(1);
+        westTrafficLight -> release(kMaxCars2Pass);
+    } else {
+        for(int iter(0); iter < kMaxCars2Pass; ++iter) westTrafficLight -> acquire(1);
+        eastTrafficLight -> release(kMaxCars2Pass);
+    }
 }

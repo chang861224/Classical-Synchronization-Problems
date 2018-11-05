@@ -33,7 +33,7 @@ Canvas::updateCanvas()
     height = (this -> size()).height();
 
     upLanePos = (height / 2) - laneWidth + lanePadding;
-    downLanePos = (height / 2) + laneWidth - lanePadding;
+    downLanePos = (height / 2) + lanePadding;
     midLanePos = (height / 2) - (laneWidth / 2) + lanePadding;
     drawSingleLaneBridge();
 }
@@ -103,6 +103,12 @@ Canvas::drawSingleLaneBridge()
 void
 Canvas::setObjects(int id, int pos)
 {
+    bool east2west(false);
+    if(pos < 0) {
+        pos += bridgeLen;
+        east2west = true;
+    }
+
     // Calculate x, y position value
     int x, y, rPos(pos + carWidth);
     x = pos * width / bridgeLen;
@@ -111,20 +117,26 @@ Canvas::setObjects(int id, int pos)
     } else if(bridgeTurnPos[1] <= rPos && rPos <= bridgeTurnPos[2]) {
         double ratio = (double)(rPos - bridgeTurnPos[1]) / (bridgeTurnPos[2] - bridgeTurnPos[1]);
         double offset = (laneWidth / 2) * ratio;
-        y = upLanePos + offset;
+        if(!east2west) y = upLanePos + offset;
+        else y = downLanePos - offset;
     } else if(bridgeTurnPos[3] <= pos && pos <= bridgeTurnPos[4]) {
         double ratio = (double)(pos - bridgeTurnPos[3]) / (bridgeTurnPos[4] - bridgeTurnPos[3]);
         double offset = (laneWidth / 2) * ratio;
-        y = midLanePos - offset;
+        if(!east2west) y = midLanePos - offset;
+        else y = midLanePos + offset;
     } else {
-        y = upLanePos;
+        if(!east2west) y = upLanePos;
+        else y = downLanePos;
     }
 
     if(objects.find(id) != objects.end()){
         objects.at(id).xpos = x;
         objects.at(id).ypos = y;
     } else {
-        objects.insert(std::pair<int, Object>(id, Object(x, y, carHeight, 0, ":/cars/img/redcar.png")));
+        if(!east2west) objects.insert(std::pair<int, Object>(id, Object(x, y, carHeight, 0, ":/cars/img/redcar.png")));
+        else {
+            objects.insert(std::pair<int, Object>(id, Object(x, y, carHeight, 180, ":/cars/img/yellowcar.png")));
+        }
     }
     this -> update();
 }
