@@ -38,8 +38,21 @@ SingleLaneBridge::run()
     trafficControler -> setTrafficLight(westTrafficLight, eastTrafficLight);
 
     std::map<int, Car*>::iterator iter;
+    Car *lastUpCar, *lastDownCar;
     for(iter = cars.begin(); iter != cars.end(); ++iter){
         Car *currCar = (iter -> second);
+        if(currCar -> getDirection()) {
+            if(lastDownCar == NULL) currCar -> setMaxDistance(bridgeLen);
+            else {
+                lastDownCar -> setBackCar(currCar);
+            }
+        } else {
+            if(lastUpCar == NULL) currCar -> setMaxDistance(bridgeLen);
+            else {
+                lastUpCar -> setBackCar(currCar);
+            }
+        }
+        connect(currCar, SIGNAL(backCarMaxDistance(Car*,int)), this, SLOT(updatePos(Car*,int)));
 
         currCar -> start();
         connect(currCar, SIGNAL(posChanged(int,int)), this, SIGNAL(carChanged(int,int)));
@@ -47,14 +60,19 @@ SingleLaneBridge::run()
         connect(currCar, SIGNAL(finished(int)), this, SIGNAL(deleteCar(int)));
         connect(currCar, SIGNAL(leaveBridge(bool)), this, SLOT(setFinishCar(bool)));
 
+        if(currCar -> getDirection()) lastDownCar = currCar;
+        else lastUpCar = currCar;
         QThread::currentThread() -> msleep(500);
     }
 }
 
 void
-SingleLaneBridge::updatePos(int carID, int pos)
+SingleLaneBridge::updatePos(Car *car, int pos)
 {
-    qDebug() << "Car:" << carID << ", Pos:" << pos;
+    if((car -> getBackCar()) != NULL) {
+        Car *backCar = (car -> getBackCar());
+        backCar -> setMaxDistance(pos);
+    }
 }
 
 void
@@ -64,14 +82,12 @@ SingleLaneBridge::setFinishCar(bool direction)
         --downCarsCount;
         if(upCarsCount > downCarsCount && !(*trafficLightChange)) {
             trafficControler -> start();
-            qDebug() << "Up Change";
         }
     }
     else {
         --upCarsCount;
         if(downCarsCount > upCarsCount && !(*trafficLightChange)) {
             trafficControler -> start();
-            qDebug() << "Down Change";
         }
     }
 }

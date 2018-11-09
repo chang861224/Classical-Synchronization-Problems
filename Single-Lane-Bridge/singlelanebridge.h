@@ -23,7 +23,7 @@ public:
     bool east2west; // Control which direction's car can go
 
 public slots:
-    void updatePos(int carID, int pos);
+    void updatePos(Car *car, int pos);
     void setFinishCar(bool direction);
 
 signals:

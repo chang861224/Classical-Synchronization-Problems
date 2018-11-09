@@ -7,6 +7,8 @@ Car::Car(bool direction, int speed) : id(++lastID)
 {
     srand(lastID);
 
+    maxDistance = new int(0);
+
     // Set direction
     _direction = direction;
 
@@ -21,6 +23,8 @@ void
 Car::run()
 {
     for(int pos(1); pos < bridgeLen; ++pos){
+        while (pos > (*maxDistance)) QThread::currentThread() -> msleep(100);
+
         if(pos == bridgeEntryPos) {
             while(*disablePass) QThread::currentThread() -> msleep(100);
             if(_direction == false) {
@@ -38,9 +42,11 @@ Car::run()
 
         if(_direction == false) emit posChanged(id, pos);
         else if(_direction == true) emit posChanged(id, -pos);
+        emit backCarMaxDistance(this, pos-60);
         QThread::currentThread() -> msleep(10);
     }
 
+    emit backCarMaxDistance(this, bridgeLen);
     emit finished(id);
 }
 
@@ -55,10 +61,36 @@ Car::setTrafficLight(QSemaphore *left, QSemaphore *right)
 {
     lTrafficLight = left;
     rTrafficLight = right;
+
+    back = NULL;
 }
 
 void
 Car::setCarPass(bool *lightChange)
 {
     disablePass = lightChange;
+}
+
+void
+Car::setMaxDistance(int distance)
+{
+    *maxDistance = distance;
+}
+
+bool
+Car::getDirection() const
+{
+    return _direction;
+}
+
+void
+Car::setBackCar(Car *car)
+{
+    back = car;
+}
+
+Car*
+Car::getBackCar() const
+{
+    return back;
 }
