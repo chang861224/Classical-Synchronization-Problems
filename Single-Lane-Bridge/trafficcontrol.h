@@ -14,6 +14,7 @@ public:
     QSemaphore *lTrafficLight;
     QSemaphore *rTrafficLight;
     bool *disablePass;
+    void setLanePass(bool direction);
 
 public slots:
     void setTrafficLight(QSemaphore *left, QSemaphore *right);

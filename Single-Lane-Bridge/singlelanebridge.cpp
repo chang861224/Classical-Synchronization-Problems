@@ -73,21 +73,25 @@ SingleLaneBridge::updatePos(Car *car, int pos)
         Car *backCar = (car -> getBackCar());
         backCar -> setMaxDistance(pos);
     }
+    qDebug() << westTrafficLight->available() << eastTrafficLight->available() << *trafficLightChange;
 }
 
 void
 SingleLaneBridge::setFinishCar(bool direction)
 {
+    qDebug() << direction;
     if(direction) {
         --downCarsCount;
         if(upCarsCount > downCarsCount && !(*trafficLightChange)) {
-            trafficControler -> start();
+            trafficControler -> setLanePass(!direction);
+//            trafficControler -> start();
         }
     }
     else {
         --upCarsCount;
         if(downCarsCount > upCarsCount && !(*trafficLightChange)) {
-            trafficControler -> start();
+            trafficControler -> setLanePass(!direction);
+//            trafficControler -> start();
         }
     }
 }

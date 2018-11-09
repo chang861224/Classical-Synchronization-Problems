@@ -36,3 +36,11 @@ TrafficControl::setCarPass(bool *lightChange)
 {
     disablePass = lightChange;
 }
+
+void
+TrafficControl::setLanePass(bool direction)
+{
+    if(east2west != direction){
+        this -> start();
+    }
+}
