@@ -12,6 +12,8 @@ SingleLaneBridge::SingleLaneBridge()
     downCarsCount = 0;
 
     trafficLightChange = new bool(false);
+
+    carWidth = 60;
 }
 
 void
@@ -71,9 +73,9 @@ SingleLaneBridge::updatePos(Car *car, int pos)
 {
     if((car -> getBackCar()) != NULL) {
         Car *backCar = (car -> getBackCar());
-        backCar -> setMaxDistance(pos);
+        if(pos == bridgeLen) backCar -> setMaxDistance(bridgeLen);
+        else backCar -> setMaxDistance(pos - carWidth);
     }
-    qDebug() << westTrafficLight->available() << eastTrafficLight->available() << *trafficLightChange;
 }
 
 void
@@ -84,14 +86,24 @@ SingleLaneBridge::setFinishCar(bool direction)
         --downCarsCount;
         if(upCarsCount > downCarsCount && !(*trafficLightChange)) {
             trafficControler -> setLanePass(!direction);
-//            trafficControler -> start();
         }
     }
     else {
         --upCarsCount;
         if(downCarsCount > upCarsCount && !(*trafficLightChange)) {
             trafficControler -> setLanePass(!direction);
-//            trafficControler -> start();
         }
     }
+}
+
+void
+SingleLaneBridge::init()
+{
+    this -> start();
+}
+
+void
+SingleLaneBridge::setCarWidth(int width)
+{
+    carWidth = width;
 }

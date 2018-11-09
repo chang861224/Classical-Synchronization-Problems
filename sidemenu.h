@@ -16,6 +16,7 @@ private:
     QVBoxLayout *layout;
 
 signals:
+    void run();
 
 public slots:
 };

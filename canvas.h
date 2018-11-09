@@ -15,6 +15,7 @@ public:
     void drawSingleLaneBridge();
 
 signals:
+    void carWidthChange(int);
 
 public slots:
     void updateCanvas();

@@ -31,7 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Problem
     SingleLaneBridge *problem = new SingleLaneBridge;
-    problem -> start();
+    connect(canvas, SIGNAL(carWidthChange(int)), problem, SLOT(setCarWidth(int)));
+    connect(sidemenu, SIGNAL(run()), problem, SLOT(init()));
     connect(problem, SIGNAL(carChanged(int,int)), canvas, SLOT(setObjects(int,int)));
     connect(problem, SIGNAL(deleteCar(int)), canvas, SLOT(deleteObject(int)));
 

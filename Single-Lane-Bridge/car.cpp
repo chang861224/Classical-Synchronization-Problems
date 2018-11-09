@@ -42,7 +42,8 @@ Car::run()
 
         if(_direction == false) emit posChanged(id, pos);
         else if(_direction == true) emit posChanged(id, -pos);
-        emit backCarMaxDistance(this, pos-60);
+        emit backCarMaxDistance(this, pos);
+
         QThread::currentThread() -> msleep(10);
     }
 
@@ -94,3 +95,4 @@ Car::getBackCar() const
 {
     return back;
 }
+

@@ -25,10 +25,11 @@ SideMenu::createCarWidgets()
     QLabel *carLabel = new QLabel(tr("Car"));
     carLabel -> setAlignment(Qt::AlignCenter);
     carLayout -> addWidget(carLabel, 0, 0, 1, 3);
+    QPushButton *startBtn = new QPushButton(tr("Start"));
+    carLayout -> addWidget(startBtn, 1, 1);
+    connect(startBtn, SIGNAL(clicked()), this, SIGNAL(run()));
     QPushButton *addCarBtn = new QPushButton(tr("Add (+1)"));
     carLayout -> addWidget(addCarBtn, 1, 0);
-    QPushButton *removeCarBtn = new QPushButton(tr("Remove (-1)"));
-    carLayout -> addWidget(removeCarBtn, 1, 1);
     QPushButton *autoCreateCarBtn = new QPushButton(tr("Auto"));
     carLayout -> addWidget(autoCreateCarBtn, 1, 2);
     carLayout -> addWidget(createCarFreqWidget(), 2, 0, 1, 3);

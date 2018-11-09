@@ -21,14 +21,19 @@ public:
     SingleLaneBridge();
     void run();
     bool east2west; // Control which direction's car can go
+    int carWidth;
 
 public slots:
     void updatePos(Car *car, int pos);
     void setFinishCar(bool direction);
+    void setCarWidth(int width);
 
 signals:
     void carChanged(int carID, int pos);
     void deleteCar(int carID);
+
+public slots:
+    void init();
 
 private:
     bool *trafficLightChange;

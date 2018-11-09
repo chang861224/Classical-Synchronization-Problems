@@ -35,6 +35,12 @@ Canvas::updateCanvas()
     upLanePos = (height / 2) - laneWidth + lanePadding;
     downLanePos = (height / 2) + lanePadding;
     midLanePos = (height / 2) - (laneWidth / 2) + lanePadding;
+
+    carHeight = laneWidth - (lanePadding * 2);
+    QPixmap tmp(":/cars/img/redcar.png");
+    carWidth = carHeight * (tmp.width() / tmp.height());
+    emit carWidthChange(bridgeLen * carWidth / width);
+
     drawSingleLaneBridge();
 }
 
@@ -111,8 +117,7 @@ Canvas::setObjects(int id, int pos)
 
     // Calculate x, y position value
     int x, y;
-    if(east2west) x = pos * width / bridgeLen;
-    else x = (pos - carWidth) * width / bridgeLen;
+    x = pos * width / bridgeLen;
 
     if(bridgeTurnPos[2] < pos && pos < bridgeTurnPos[3]) {
         y = midLanePos;
