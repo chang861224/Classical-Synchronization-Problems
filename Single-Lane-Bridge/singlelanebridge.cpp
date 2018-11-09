@@ -40,7 +40,7 @@ SingleLaneBridge::run()
     trafficControler -> setTrafficLight(westTrafficLight, eastTrafficLight);
 
     std::map<int, Car*>::iterator iter;
-    Car *lastUpCar, *lastDownCar;
+    Car *lastUpCar(NULL), *lastDownCar(NULL);
     for(iter = cars.begin(); iter != cars.end(); ++iter){
         Car *currCar = (iter -> second);
         if(currCar -> getDirection()) {
@@ -64,7 +64,7 @@ SingleLaneBridge::run()
 
         if(currCar -> getDirection()) lastDownCar = currCar;
         else lastUpCar = currCar;
-        QThread::currentThread() -> msleep(500);
+        QThread::currentThread() -> msleep(800);
     }
 }
 
@@ -81,7 +81,6 @@ SingleLaneBridge::updatePos(Car *car, int pos)
 void
 SingleLaneBridge::setFinishCar(bool direction)
 {
-    qDebug() << direction;
     if(direction) {
         --downCarsCount;
         if(upCarsCount > downCarsCount && !(*trafficLightChange)) {

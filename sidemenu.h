@@ -11,7 +11,7 @@ public:
     explicit SideMenu(QWidget *parent = nullptr);
 
 private:
-    QWidget* createCarWidgets();
+    QWidget* createControlWidgets();
     QWidget* createCarFreqWidget();
     QVBoxLayout *layout;
 

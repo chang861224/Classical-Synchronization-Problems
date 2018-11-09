@@ -12,17 +12,17 @@ SideMenu::SideMenu(QWidget *parent) : QWidget(parent)
     layout = new QVBoxLayout();
     setLayout(layout);
 
-    layout -> addWidget(createCarWidgets());
+    layout -> addWidget(createControlWidgets());
 }
 
 QWidget*
-SideMenu::createCarWidgets()
+SideMenu::createControlWidgets()
 {
     // Layout
     QGridLayout *carLayout = new QGridLayout();
 
     // Widgets
-    QLabel *carLabel = new QLabel(tr("Car"));
+    QLabel *carLabel = new QLabel(tr("Control"));
     carLabel -> setAlignment(Qt::AlignCenter);
     carLayout -> addWidget(carLabel, 0, 0, 1, 3);
     QPushButton *startBtn = new QPushButton(tr("Start"));

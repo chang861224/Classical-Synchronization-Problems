@@ -23,7 +23,7 @@ void
 Car::run()
 {
     for(int pos(1); pos < bridgeLen; ++pos){
-        while (pos > (*maxDistance)) QThread::currentThread() -> msleep(100);
+        while(pos > (*maxDistance)) QThread::currentThread() -> msleep(100);
 
         if(pos == bridgeEntryPos) {
             while(*disablePass) QThread::currentThread() -> msleep(100);
