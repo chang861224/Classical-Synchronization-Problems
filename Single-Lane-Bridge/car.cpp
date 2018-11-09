@@ -17,12 +17,14 @@ Car::Car(bool direction, int speed) : id(++lastID)
     else if(speed > 20) velocity = 20;
     else if(speed < 0) velocity = 1;
     else velocity = speed;
+
+    pos = 0;
 }
 
 void
 Car::run()
 {
-    for(int pos(1); pos < bridgeLen; ++pos){
+    for(pos=1; pos < bridgeLen; ++pos){
         while(pos > (*maxDistance)) QThread::currentThread() -> msleep(100);
 
         if(pos == bridgeEntryPos) {
@@ -94,5 +96,11 @@ Car*
 Car::getBackCar() const
 {
     return back;
+}
+
+int
+Car::getPos() const
+{
+    return pos;
 }
 

@@ -12,11 +12,13 @@ public:
 
 private:
     QWidget* createControlWidgets();
-    QWidget* createCarFreqWidget();
+    QWidget* carControlWidget(int mode=0);
     QVBoxLayout *layout;
 
 signals:
     void run();
+    void freqChange(int);
+    void speedChange(int);
 
 public slots:
 };

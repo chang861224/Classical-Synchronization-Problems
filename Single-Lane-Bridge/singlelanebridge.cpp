@@ -14,6 +14,7 @@ SingleLaneBridge::SingleLaneBridge()
     trafficLightChange = new bool(false);
 
     carWidth = 60;
+    createFreq = 800;
 }
 
 void
@@ -47,11 +48,13 @@ SingleLaneBridge::run()
             if(lastDownCar == NULL) currCar -> setMaxDistance(bridgeLen);
             else {
                 lastDownCar -> setBackCar(currCar);
+                currCar -> setMaxDistance(lastDownCar->getPos() - carWidth);
             }
         } else {
             if(lastUpCar == NULL) currCar -> setMaxDistance(bridgeLen);
             else {
                 lastUpCar -> setBackCar(currCar);
+                currCar -> setMaxDistance(lastUpCar->getPos() - carWidth);
             }
         }
         connect(currCar, SIGNAL(backCarMaxDistance(Car*,int)), this, SLOT(updatePos(Car*,int)));
@@ -64,7 +67,7 @@ SingleLaneBridge::run()
 
         if(currCar -> getDirection()) lastDownCar = currCar;
         else lastUpCar = currCar;
-        QThread::currentThread() -> msleep(800);
+        QThread::currentThread() -> msleep(unsigned(createFreq));
     }
 }
 
@@ -105,4 +108,10 @@ void
 SingleLaneBridge::setCarWidth(int width)
 {
     carWidth = width;
+}
+
+void
+SingleLaneBridge::setCreateFreq(int ms)
+{
+    createFreq = ms;
 }

@@ -24,15 +24,22 @@ SideMenu::createControlWidgets()
     // Widgets
     QLabel *carLabel = new QLabel(tr("Control"));
     carLabel -> setAlignment(Qt::AlignCenter);
-    carLayout -> addWidget(carLabel, 0, 0, 1, 3);
     QPushButton *startBtn = new QPushButton(tr("Start"));
-    carLayout -> addWidget(startBtn, 1, 1);
-    connect(startBtn, SIGNAL(clicked()), this, SIGNAL(run()));
     QPushButton *addCarBtn = new QPushButton(tr("Add (+1)"));
-    carLayout -> addWidget(addCarBtn, 1, 0);
     QPushButton *autoCreateCarBtn = new QPushButton(tr("Auto"));
+    QWidget *carFreq = carControlWidget(0);
+    QWidget *carSpeed = carControlWidget(1);
+
+    // Layout
+    carLayout -> addWidget(carLabel, 0, 0, 1, 3);
+    carLayout -> addWidget(startBtn, 1, 1);
+    carLayout -> addWidget(addCarBtn, 1, 0);
     carLayout -> addWidget(autoCreateCarBtn, 1, 2);
-    carLayout -> addWidget(createCarFreqWidget(), 2, 0, 1, 3);
+    carLayout -> addWidget(carFreq, 2, 0, 1, 3);
+    carLayout -> addWidget(carSpeed, 3, 0, 1, 3);
+
+    // Behavior
+    connect(startBtn, SIGNAL(clicked()), this, SIGNAL(run()));
 
     // Pack as a widget
     QWidget *carMenu = new QWidget;
@@ -42,22 +49,32 @@ SideMenu::createControlWidgets()
 }
 
 QWidget*
-SideMenu::createCarFreqWidget()
+SideMenu::carControlWidget(int mode)
 {
     // Widgets
-    QSlider *carFreqSlider = new QSlider(Qt::Horizontal);
-    carFreqSlider -> setRange(10, 500);
-    carFreqSlider -> setValue(100);
-    QLabel *carFreqLabel = new QLabel();
-    carFreqLabel -> setText(QString::number(carFreqSlider -> value()));
+    QLabel *labelTitle = new QLabel();
+    switch(mode){
+    case 0: labelTitle -> setText(tr("Frequence: ")); break;
+    case 1: labelTitle -> setText(tr("Speed: ")); break;
+    }
+    QSlider *slider = new QSlider(Qt::Horizontal);
+    slider -> setRange(100, 1500);
+    slider -> setValue(800);
+    QLabel *labelValue = new QLabel();
+    labelValue -> setText(QString::number(slider -> value()));
 
     // Behavior
-    connect(carFreqSlider, SIGNAL(valueChanged(int)), carFreqLabel, SLOT(setNum(int)));
+    connect(slider, SIGNAL(valueChanged(int)), labelValue, SLOT(setNum(int)));
+    switch(mode){
+    case 0: connect(slider, SIGNAL(valueChanged(int)), this, SIGNAL(freqChange(int))); break;
+    case 1: connect(slider, SIGNAL(valueChanged(int)), this, SIGNAL(speedChange(int))); break;
+    }
 
     // Layout
     QHBoxLayout *carFreqLayout = new QHBoxLayout();
-    carFreqLayout -> addWidget(carFreqSlider);
-    carFreqLayout -> addWidget(carFreqLabel);
+    carFreqLayout -> addWidget(labelTitle);
+    carFreqLayout -> addWidget(slider);
+    carFreqLayout -> addWidget(labelValue);
     carFreqLayout -> addWidget(new QLabel(tr("ms")));
 
     // Pack as a widget

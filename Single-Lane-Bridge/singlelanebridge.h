@@ -34,6 +34,7 @@ signals:
 
 public slots:
     void init();
+    void setCreateFreq(int ms);
 
 private:
     bool *trafficLightChange;
@@ -44,6 +45,7 @@ private:
     int upCarsCount;
     int downCarsCount;
     TrafficControl *trafficControler;
+    int createFreq;
 };
 
 #endif // SINGLELANEBRIDGE_H
