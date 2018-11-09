@@ -147,4 +147,6 @@ void
 Canvas::deleteObject(int id)
 {
     objects.erase(id);
+
+    this -> update();
 }

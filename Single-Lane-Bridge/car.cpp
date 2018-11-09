@@ -22,6 +22,7 @@ Car::run()
 {
     for(int pos(1); pos < bridgeLen; ++pos){
         if(pos == bridgeEntryPos) {
+            while(*disablePass) QThread::currentThread() -> msleep(100);
             if(_direction == false) {
                 lTrafficLight -> acquire(1);
             }
@@ -31,6 +32,8 @@ Car::run()
         } else if(pos == (bridgeLen - bridgeEntryPos)) {
             if(_direction == false) lTrafficLight -> release(1);
             else if(_direction == true) rTrafficLight -> release(1);
+
+            emit leaveBridge(_direction);
         }
 
         if(_direction == false) emit posChanged(id, pos);
@@ -52,4 +55,10 @@ Car::setTrafficLight(QSemaphore *left, QSemaphore *right)
 {
     lTrafficLight = left;
     rTrafficLight = right;
+}
+
+void
+Car::setCarPass(bool *lightChange)
+{
+    disablePass = lightChange;
 }

@@ -30,6 +30,7 @@ SOURCES += \
         sidemenu.cpp \
     Single-Lane-Bridge/singlelanebridge.cpp \
     Single-Lane-Bridge/car.cpp \
+    Single-Lane-Bridge/trafficcontrol.cpp
 
 HEADERS += \
         canvas.h \
@@ -38,6 +39,7 @@ HEADERS += \
         sidemenu.h \
     Single-Lane-Bridge/singlelanebridge.h \
     Single-Lane-Bridge/car.h \
+    Single-Lane-Bridge/trafficcontrol.h
 
 RESOURCES += \
     resourcefile.qrc
