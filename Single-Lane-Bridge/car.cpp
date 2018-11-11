@@ -3,7 +3,7 @@
 
 unsigned int Car::lastID = 0;
 
-Car::Car(bool direction, int speed) : id(++lastID)
+Car::Car(bool direction, int timeInterval) : id(++lastID)
 {
     srand(lastID);
 
@@ -13,10 +13,10 @@ Car::Car(bool direction, int speed) : id(++lastID)
     _direction = direction;
 
     // Set velocity
-    if(speed == 0) velocity = (1 + rand() % 19);
-    else if(speed > 20) velocity = 20;
-    else if(speed < 0) velocity = 1;
-    else velocity = speed;
+    if(timeInterval == 0) tickInterval = (7 + rand() % 7);
+    else if(timeInterval > 13) tickInterval = 13;
+    else if(timeInterval < 7) tickInterval = 7;
+    else tickInterval = timeInterval;
 
     pos = 0;
 }
@@ -46,7 +46,7 @@ Car::run()
         else if(_direction == true) emit posChanged(id, -pos);
         emit backCarMaxDistance(this, pos);
 
-        QThread::currentThread() -> msleep(10);
+        QThread::currentThread() -> msleep(tickInterval);
     }
 
     emit backCarMaxDistance(this, bridgeLen);

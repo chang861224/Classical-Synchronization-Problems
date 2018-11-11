@@ -19,6 +19,7 @@ signals:
     void run();
     void freqChange(int);
     void speedChange(int);
+    void createCar();
 
 public slots:
 };

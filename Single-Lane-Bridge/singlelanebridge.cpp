@@ -10,52 +10,47 @@ SingleLaneBridge::SingleLaneBridge()
 
     upCarsCount = 0;
     downCarsCount = 0;
-
     trafficLightChange = new bool(false);
-
     carWidth = 60;
     createFreq = 800;
+    carAmount = 0;
 }
 
 void
 SingleLaneBridge::run()
 {
-    for(int iter(0); iter < 50; ++iter){
-        Car *tmpCar;
-        if(iter %2) {
-            tmpCar = new Car(true);
-            ++upCarsCount;
-        }
-        else {
-            tmpCar = new Car(false);
-            ++downCarsCount;
-        }
-
-        tmpCar -> setTrafficLight(westTrafficLight, eastTrafficLight);
-        tmpCar -> setCarPass(trafficLightChange);
-        cars.insert(std::pair<int, Car*>(tmpCar->getID(), tmpCar));
-    }
-
     trafficControler = new TrafficControl;
     trafficControler -> setCarPass(trafficLightChange);
     trafficControler -> setTrafficLight(westTrafficLight, eastTrafficLight);
 
-    std::map<int, Car*>::iterator iter;
-    Car *lastUpCar(NULL), *lastDownCar(NULL);
-    for(iter = cars.begin(); iter != cars.end(); ++iter){
-        Car *currCar = (iter -> second);
-        if(currCar -> getDirection()) {
-            if(lastDownCar == NULL) currCar -> setMaxDistance(bridgeLen);
-            else {
-                lastDownCar -> setBackCar(currCar);
-                currCar -> setMaxDistance(lastDownCar->getPos() - carWidth);
-            }
+    Car *lastUpCar(NULL), *lastDownCar(NULL), *currCar;
+    for(int iter(0); iter < INT_MAX; ++iter) {
+        while(iter >= carAmount) QThread::currentThread() -> msleep(100);
+
+        if(iter % 2) {
+            currCar = new Car(false, 7);
+            ++downCarsCount;
         } else {
-            if(lastUpCar == NULL) currCar -> setMaxDistance(bridgeLen);
-            else {
+            currCar = new Car(true, 7);
+            ++upCarsCount;
+        }
+        currCar -> setTrafficLight(westTrafficLight, eastTrafficLight);
+        currCar -> setCarPass(trafficLightChange);
+
+        if(currCar -> getDirection()) {
+            if(lastDownCar == NULL || lastDownCar->getPos() == bridgeLen) {
+                currCar -> setMaxDistance(bridgeLen);
+            } else {
+                lastDownCar -> setBackCar(currCar);
+                currCar -> setMaxDistance(lastDownCar->getPos() - carWidth);  
+            } lastDownCar = currCar;
+        } else {
+            if(lastUpCar == NULL || lastUpCar->getPos() == bridgeLen) {
+                currCar -> setMaxDistance(bridgeLen);
+            } else {
                 lastUpCar -> setBackCar(currCar);
                 currCar -> setMaxDistance(lastUpCar->getPos() - carWidth);
-            }
+            } lastUpCar = currCar;
         }
         connect(currCar, SIGNAL(backCarMaxDistance(Car*,int)), this, SLOT(updatePos(Car*,int)));
 
@@ -65,8 +60,6 @@ SingleLaneBridge::run()
         connect(currCar, SIGNAL(finished(int)), this, SIGNAL(deleteCar(int)));
         connect(currCar, SIGNAL(leaveBridge(bool)), this, SLOT(setFinishCar(bool)));
 
-        if(currCar -> getDirection()) lastDownCar = currCar;
-        else lastUpCar = currCar;
         QThread::currentThread() -> msleep(unsigned(createFreq));
     }
 }
@@ -114,4 +107,10 @@ void
 SingleLaneBridge::setCreateFreq(int ms)
 {
     createFreq = ms;
+}
+
+void
+SingleLaneBridge::createCar()
+{
+    ++carAmount;
 }

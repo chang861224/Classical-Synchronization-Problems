@@ -11,7 +11,7 @@ class Car : public SingleLaneBridge
     Q_OBJECT
 
 public:
-    Car(bool direction=0, int speed=0);
+    Car(bool direction=0, int timeInterval=0);
     void run();
     unsigned int getID() const;
     int getPos() const;
@@ -34,7 +34,7 @@ public slots:
 
 private:
     unsigned int id;
-    int velocity;
+    int tickInterval;
     int pos;
     static unsigned int lastID;
     bool _direction; // {false} for left to right, {true} for right to left

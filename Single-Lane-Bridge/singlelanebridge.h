@@ -35,17 +35,18 @@ signals:
 public slots:
     void init();
     void setCreateFreq(int ms);
+    void createCar();
 
 private:
     bool *trafficLightChange;
     QSemaphore *eastTrafficLight = new QSemaphore(kMaxCars2Pass);
     QSemaphore *westTrafficLight = new QSemaphore(0);
 
-    std::map<int, Car*> cars;
     int upCarsCount;
     int downCarsCount;
     TrafficControl *trafficControler;
     int createFreq;
+    int carAmount;
 };
 
 #endif // SINGLELANEBRIDGE_H
