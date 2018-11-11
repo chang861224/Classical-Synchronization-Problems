@@ -25,8 +25,9 @@ public:
 
 public slots:
     void updatePos(Car *car, int pos);
-    void setFinishCar(bool direction);
+    void setEnterCar(bool direction);
     void setCarWidth(int width);
+    void checkTraffic();
 
 signals:
     void carChanged(int carID, int pos);

@@ -25,7 +25,7 @@ signals:
     void posChanged(int, int);
     void backCarMaxDistance(Car*, int);
     void finished(int);
-    void leaveBridge(bool);
+    void enterBridge(bool);
 
 public slots:
     void setTrafficLight(QSemaphore *left, QSemaphore *right);

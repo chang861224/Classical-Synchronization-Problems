@@ -2,6 +2,7 @@
 #include "car.h"
 #include "trafficcontrol.h"
 #include <QSemaphore>
+#include <QTimer>
 
 SingleLaneBridge::SingleLaneBridge()
 {
@@ -14,6 +15,10 @@ SingleLaneBridge::SingleLaneBridge()
     carWidth = 60;
     createFreq = 800;
     carAmount = 0;
+
+    QTimer *timer = new QTimer;
+    connect(timer, SIGNAL(timeout()), this, SLOT(checkTraffic()));
+    timer -> start(1000);
 }
 
 void
@@ -28,10 +33,10 @@ SingleLaneBridge::run()
         while(iter >= carAmount) QThread::currentThread() -> msleep(100);
 
         if(iter % 2) {
-            currCar = new Car(false, 7);
+            currCar = new Car(true, 7);
             ++downCarsCount;
         } else {
-            currCar = new Car(true, 7);
+            currCar = new Car(false, 7);
             ++upCarsCount;
         }
         currCar -> setTrafficLight(westTrafficLight, eastTrafficLight);
@@ -58,7 +63,7 @@ SingleLaneBridge::run()
         connect(currCar, SIGNAL(posChanged(int,int)), this, SIGNAL(carChanged(int,int)));
         connect(currCar, SIGNAL(finished()), currCar, SLOT(deleteLater()));
         connect(currCar, SIGNAL(finished(int)), this, SIGNAL(deleteCar(int)));
-        connect(currCar, SIGNAL(leaveBridge(bool)), this, SLOT(setFinishCar(bool)));
+        connect(currCar, SIGNAL(enterBridge(bool)), this, SLOT(setEnterCar(bool)));
 
         QThread::currentThread() -> msleep(unsigned(createFreq));
     }
@@ -75,20 +80,10 @@ SingleLaneBridge::updatePos(Car *car, int pos)
 }
 
 void
-SingleLaneBridge::setFinishCar(bool direction)
+SingleLaneBridge::setEnterCar(bool direction)
 {
-    if(direction) {
-        --downCarsCount;
-        if(upCarsCount > downCarsCount && !(*trafficLightChange)) {
-            trafficControler -> setLanePass(!direction);
-        }
-    }
-    else {
-        --upCarsCount;
-        if(downCarsCount > upCarsCount && !(*trafficLightChange)) {
-            trafficControler -> setLanePass(!direction);
-        }
-    }
+    if(direction) --downCarsCount;
+    else --upCarsCount;
 }
 
 void
@@ -113,4 +108,14 @@ void
 SingleLaneBridge::createCar()
 {
     ++carAmount;
+}
+
+void
+SingleLaneBridge::checkTraffic()
+{
+    if(downCarsCount > upCarsCount && !(*trafficLightChange)) {
+        trafficControler -> setLanePass(true);
+    } else if(upCarsCount > downCarsCount && !(*trafficLightChange)) {
+        trafficControler -> setLanePass(false);
+    }
 }
