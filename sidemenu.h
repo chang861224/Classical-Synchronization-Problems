@@ -20,6 +20,7 @@ signals:
     void freqChange(int);
     void speedChange(int);
     void createCar();
+    void autoCreateCar();
 
 public slots:
 };

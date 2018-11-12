@@ -41,6 +41,7 @@ SideMenu::createControlWidgets()
     // Behavior
     connect(startBtn, SIGNAL(clicked()), this, SIGNAL(run()));
     connect(addCarBtn, SIGNAL(clicked()), this, SIGNAL(createCar()));
+    connect(autoCreateCarBtn, SIGNAL(clicked()), this, SIGNAL(autoCreateCar()));
 
     // Pack as a widget
     QWidget *carMenu = new QWidget;

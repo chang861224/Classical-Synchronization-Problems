@@ -28,15 +28,14 @@ public slots:
     void setEnterCar(bool direction);
     void setCarWidth(int width);
     void checkTraffic();
+    void init();
+    void setCreateFreq(int ms);
+    void createCar();
+    void autoCreateCar();
 
 signals:
     void carChanged(int carID, int pos);
     void deleteCar(int carID);
-
-public slots:
-    void init();
-    void setCreateFreq(int ms);
-    void createCar();
 
 private:
     bool *trafficLightChange;

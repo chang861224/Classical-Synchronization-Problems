@@ -30,13 +30,17 @@ SingleLaneBridge::run()
 
     Car *lastUpCar(NULL), *lastDownCar(NULL), *currCar;
     for(int iter(0); iter < INT_MAX; ++iter) {
-        while(iter >= carAmount) QThread::currentThread() -> msleep(100);
+        while(iter >= carAmount) {
+            if(carAmount == -1) carAmount = iter;
+            QThread::currentThread() -> msleep(100);
+        }
+
 
         if(iter % 2) {
-            currCar = new Car(true, 7);
+            currCar = new Car(true, 5);
             ++downCarsCount;
         } else {
-            currCar = new Car(false, 7);
+            currCar = new Car(false, 5);
             ++upCarsCount;
         }
         currCar -> setTrafficLight(westTrafficLight, eastTrafficLight);
@@ -118,4 +122,11 @@ SingleLaneBridge::checkTraffic()
     } else if(upCarsCount > downCarsCount && !(*trafficLightChange)) {
         trafficControler -> setLanePass(false);
     }
+}
+
+void
+SingleLaneBridge::autoCreateCar()
+{
+    if(carAmount == INT_MAX) carAmount = -1;
+    else carAmount = INT_MAX;
 }
