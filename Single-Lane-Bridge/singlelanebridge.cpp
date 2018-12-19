@@ -14,6 +14,7 @@ SingleLaneBridge::SingleLaneBridge()
     trafficLightChange = new bool(false);
     carWidth = 60;
     createFreq = 800;
+    carSpeed = 8;
     carAmount = 0;
 
     QTimer *timer = new QTimer;
@@ -37,10 +38,10 @@ SingleLaneBridge::run()
 
 
         if(iter % 2) {
-            currCar = new Car(true, 5);
+            currCar = new Car(true, 15 / carSpeed);
             ++downCarsCount;
         } else {
-            currCar = new Car(false, 5);
+            currCar = new Car(false, 15 / carSpeed);
             ++upCarsCount;
         }
         currCar -> setTrafficLight(westTrafficLight, eastTrafficLight);
@@ -129,4 +130,10 @@ SingleLaneBridge::autoCreateCar()
 {
     if(carAmount == INT_MAX) carAmount = -1;
     else carAmount = INT_MAX;
+}
+
+void
+SingleLaneBridge::setCarSpeed(int speed)
+{
+    carSpeed = speed / 100;
 }

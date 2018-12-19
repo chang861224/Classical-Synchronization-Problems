@@ -30,6 +30,7 @@ public slots:
     void checkTraffic();
     void init();
     void setCreateFreq(int ms);
+    void setCarSpeed(int speed);
     void createCar();
     void autoCreateCar();
 
@@ -46,6 +47,7 @@ private:
     int downCarsCount;
     TrafficControl *trafficControler;
     int createFreq;
+    int carSpeed;
     int carAmount;
 };
 

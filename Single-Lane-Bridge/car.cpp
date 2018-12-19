@@ -17,6 +17,7 @@ Car::Car(bool direction, int timeInterval) : id(++lastID)
     else if(timeInterval > 20) tickInterval = 20;
     else if(timeInterval < 5) tickInterval = 5;
     else tickInterval = timeInterval;
+    tickInterval += (rand() % 5);
 
     pos = 0;
 }

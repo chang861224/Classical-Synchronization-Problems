@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(sidemenu, SIGNAL(createCar()), problem, SLOT(createCar()));
     connect(sidemenu, SIGNAL(autoCreateCar()), problem, SLOT(autoCreateCar()));
     connect(sidemenu, SIGNAL(freqChange(int)), problem, SLOT(setCreateFreq(int)));
+    connect(sidemenu, SIGNAL(speedChange(int)), problem, SLOT(setCarSpeed(int)));
     connect(problem, SIGNAL(carChanged(int,int)), canvas, SLOT(setObjects(int,int)));
     connect(problem, SIGNAL(deleteCar(int)), canvas, SLOT(deleteObject(int)));
 

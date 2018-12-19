@@ -77,7 +77,8 @@ Canvas::paintEvent(QPaintEvent *event)
        QPixmap scaledImg(img.scaledToHeight(tmp.height, Qt::SmoothTransformation));
        QTransform trans;
        QPixmap outImg(scaledImg.transformed(trans.rotate(tmp.deg)));
-       painter.drawPixmap(tmp.xpos, tmp.ypos, outImg);
+       if(tmp.deg == 180) painter.drawPixmap(tmp.xpos, tmp.ypos, outImg);
+       else painter.drawPixmap(tmp.xpos - carWidth, tmp.ypos, outImg);
    }
 }
 
