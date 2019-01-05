@@ -20,7 +20,6 @@ class SingleLaneBridge : public QThread
 public:
     SingleLaneBridge();
     void run();
-    bool east2west; // Control which direction's car can go
     int carWidth;
 
 public slots:
@@ -39,9 +38,10 @@ signals:
     void deleteCar(int carID);
 
 private:
+    // No more car can enter the bridge if true
     bool *trafficLightChange;
-    QSemaphore *eastTrafficLight = new QSemaphore(kMaxCars2Pass);
-    QSemaphore *westTrafficLight = new QSemaphore(0);
+    bool *rightPass;
+    QSemaphore *trafficLight = new QSemaphore(kMaxCars2Pass);
 
     int upCarsCount;
     int downCarsCount;

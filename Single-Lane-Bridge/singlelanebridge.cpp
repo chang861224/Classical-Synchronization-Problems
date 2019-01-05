@@ -6,12 +6,10 @@
 
 SingleLaneBridge::SingleLaneBridge()
 {
-    if(eastTrafficLight -> available() > 0) east2west = true;
-    else if(westTrafficLight -> available() > 0) east2west = false;
-
     upCarsCount = 0;
     downCarsCount = 0;
     trafficLightChange = new bool(false);
+    rightPass = new bool(false);
     carWidth = 60;
     createFreq = 800;
     carSpeed = 8;
@@ -26,16 +24,16 @@ void
 SingleLaneBridge::run()
 {
     trafficControler = new TrafficControl;
-    trafficControler -> setCarPass(trafficLightChange);
-    trafficControler -> setTrafficLight(westTrafficLight, eastTrafficLight);
+    trafficControler -> setCarPass(trafficLightChange, rightPass);
+    trafficControler -> setTrafficLight(trafficLight);
 
     Car *lastUpCar(NULL), *lastDownCar(NULL), *currCar;
     for(int iter(0); iter < INT_MAX; ++iter) {
+        // Increase {carAmount} to make more cars
         while(iter >= carAmount) {
             if(carAmount == -1) carAmount = iter;
             QThread::currentThread() -> msleep(100);
         }
-
 
         if(iter % 2) {
             currCar = new Car(true, 15 / carSpeed);
@@ -44,8 +42,8 @@ SingleLaneBridge::run()
             currCar = new Car(false, 15 / carSpeed);
             ++upCarsCount;
         }
-        currCar -> setTrafficLight(westTrafficLight, eastTrafficLight);
-        currCar -> setCarPass(trafficLightChange);
+        currCar -> setTrafficLight(trafficLight);
+        currCar -> setCarPass(trafficLightChange, rightPass);
 
         if(currCar -> getDirection()) {
             if(lastDownCar == NULL || lastDownCar->getPos() == bridgeLen) {
@@ -119,9 +117,9 @@ void
 SingleLaneBridge::checkTraffic()
 {
     if(downCarsCount > upCarsCount && !(*trafficLightChange)) {
-        trafficControler -> setLanePass(true);
-    } else if(upCarsCount > downCarsCount && !(*trafficLightChange)) {
         trafficControler -> setLanePass(false);
+    } else if(upCarsCount > downCarsCount && !(*trafficLightChange)) {
+        trafficControler -> setLanePass(true);
     }
 }
 

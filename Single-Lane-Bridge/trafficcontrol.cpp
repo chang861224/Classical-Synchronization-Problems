@@ -10,37 +10,38 @@ TrafficControl::run()
     if(!(*disablePass)){
         (*disablePass) = true;
 
-        if(east2west){
-            rTrafficLight -> acquire(kMaxCars2Pass);
-            lTrafficLight -> release(kMaxCars2Pass);
-            east2west = false;
-        } else {
-            lTrafficLight -> acquire(kMaxCars2Pass);
-            rTrafficLight -> release(kMaxCars2Pass);
-            east2west = true;
+        // Wait until there's no car on bridge
+        trafficLight -> acquire(kMaxCars2Pass);
+
+        if(*rightPass) {
+            *rightPass = false;
         }
+        else {
+            *rightPass = true;
+        }
+        trafficLight -> release(kMaxCars2Pass);
 
         (*disablePass) = false;
     }
 }
 
 void
-TrafficControl::setTrafficLight(QSemaphore *left, QSemaphore *right)
+TrafficControl::setTrafficLight(QSemaphore *tlight)
 {
-    lTrafficLight = left;
-    rTrafficLight = right;
+    trafficLight = tlight;
 }
 
 void
-TrafficControl::setCarPass(bool *lightChange)
+TrafficControl::setCarPass(bool *lightChange, bool *rPass)
 {
     disablePass = lightChange;
+    rightPass = rPass;
 }
 
 void
 TrafficControl::setLanePass(bool direction)
 {
-    if(east2west != direction){
+    if(*rightPass == direction){
         this -> start();
     }
 }

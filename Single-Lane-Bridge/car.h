@@ -18,8 +18,7 @@ public:
     bool getDirection() const;
     void setBackCar(Car *car);
     Car* getBackCar() const;
-    QSemaphore *lTrafficLight;
-    QSemaphore *rTrafficLight;
+    QSemaphore *trafficLight;
 
 signals:
     void posChanged(int, int);
@@ -28,8 +27,8 @@ signals:
     void enterBridge(bool);
 
 public slots:
-    void setTrafficLight(QSemaphore *left, QSemaphore *right);
-    void setCarPass(bool *lightChange);
+    void setTrafficLight(QSemaphore *tLight);
+    void setCarPass(bool *lightChange, bool *rPass);
     void setMaxDistance(int distance);
 
 private:
@@ -39,6 +38,7 @@ private:
     static unsigned int lastID;
     bool _direction; // {false} for left to right, {true} for right to left
     bool *disablePass;
+    bool *rightPass;
     int *maxDistance;
     Car *back;
 };

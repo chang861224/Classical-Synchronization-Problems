@@ -11,14 +11,14 @@ class TrafficControl : public SingleLaneBridge
 public:
     TrafficControl();
     void run();
-    QSemaphore *lTrafficLight;
-    QSemaphore *rTrafficLight;
+    QSemaphore *trafficLight;
     bool *disablePass;
+    bool *rightPass;
     void setLanePass(bool direction);
 
 public slots:
-    void setTrafficLight(QSemaphore *left, QSemaphore *right);
-    void setCarPass(bool *lightChange);
+    void setTrafficLight(QSemaphore *tLight);
+    void setCarPass(bool *lightChange, bool *rPass);
 
 private:
 };
