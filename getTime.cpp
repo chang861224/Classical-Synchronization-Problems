@@ -5,10 +5,17 @@ using namespace std;
 class getTime{
 	public:
 		getTime(double n);
-		double time;
+		double time();
+	
+	private:
+		double Time;
 };
 
 getTime::getTime(double n){
 	double x = (double)rand() / (RAND_MAX + 1.0);
-	time = (-1) * (x / n);
+	Time = (-1) * (x / n);
+}
+
+double getTime::time(){
+	return Time;
 }
